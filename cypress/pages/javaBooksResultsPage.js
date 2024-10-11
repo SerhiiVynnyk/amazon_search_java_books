@@ -13,7 +13,7 @@ export class JavaBooksResults {
      cy.get(this.bookCard).each(($card) => {
       const bookinfo = {
         name: $card.find(this.h2).text().trim(),
-        author: $card.find(this.bookAuthor).text().trim().split('|').find(str => str.trim().startsWith('by')).trim().slice(3),
+        authors: $card.find(this.bookAuthor).text().trim().split('|').find(str => str.trim().startsWith('by')).trim().replace(/by |, et al\./g, '').split(', '),
         price: $card.find(this.bookPrice).not(this.textPrice).last().find(this.offscreanPrice).text().trim(),
         isBestSeller: $card.find(this.bestSellerSign).length > 0
       };

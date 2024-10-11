@@ -13,4 +13,10 @@ export class Actions {
     cy.get(locator)
       .click();
   }
+
+  static clickNestedElemByLocator(locator, nested){
+    cy.get(locator)
+      .find(nested)
+      .click();
+  }
 }

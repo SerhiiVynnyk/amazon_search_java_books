@@ -10,7 +10,7 @@ describe('Search Java books', () => {
   it('Select informations about Java books', () => {
     let booksList = [];
     let bookName;
-    let bookAuthor;
+    let bookAuthors = [];
     let bookPrice;
 
     cy.visit('/');
@@ -19,13 +19,14 @@ describe('Search Java books', () => {
     booksList = javaBooksResults.genetgenerateArrayOfBooksObjs();
     cy.then(() => {
       cy.visit(testInformation.javaBookLink);
-      cy.get(headFirstJava.bookTitle).should($title => bookName = $title.text().trim());
-      cy.get(headFirstJava.bookByInfo).find('a').first().should($authors => bookAuthor = $authors.text().trim());
-      cy.get(headFirstJava.slotPrice).first().should($price => bookPrice = $price.text().substring($price.text().indexOf('-') + 1).trim())
+      headFirstJava.openAllBookAuthors();
+      headFirstJava.getBookTitle().then((title) => bookName = title);
+      bookAuthors = headFirstJava.getArrayOfAuthors();
+      headFirstJava.getBookPrice().then(price => bookPrice = price);
     }).then(() => {
       const searchedBook = booksList.find(item => item.name === bookName);
       headFirstJava.chekBooksObjectsPriceToEqual(searchedBook.price, bookPrice);
-      headFirstJava.chekBooksObjectsAuthorsToInclude(searchedBook.author, bookAuthor);
+      headFirstJava.chekBooksObjectsAuthorsToInclude(bookAuthors.join(', '), searchedBook.authors.join(', '));
     });
   });
 });
